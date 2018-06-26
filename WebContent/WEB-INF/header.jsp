@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="css/core-style.css">
     <link rel="stylesheet" href="style.css">
     
-    <script src="js/jquery/jquery-2.2.4.min.js"></script>
+    <script src="js/jquery/jquery-3.3.1.min.js"></script>
     <script src="js/jquery/jquery.twbsPagination.js"></script>
 
 </head>
