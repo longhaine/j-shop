@@ -165,7 +165,7 @@
 							%>
                             <!-- Single Product -->
                             <div class="col-12 col-sm-6 col-lg-4 items">
-                                <div class="single-product-wrapper" nameI="<%=name%>" priceI="<%=price%>" id="<%=id%>">
+                                <div class="single-product-wrapper" nameI="<%=name%>" priceI="<%=price%>">
                                     <!-- Product Image -->
                                     <div class="product-img">
                                         <img src="<%=image%>1.jpg" alt="">
@@ -190,7 +190,7 @@
                                         <div class="hover-content">
                                             <!-- Add to Cart -->
                                             <div class="add-to-cart-btn">
-                                                <a href="#" onclick="addCart(<%=id %>)"class="btn essence-btn">Add to Cart</a>
+                                                <a href="#" class="btn essence-btn">Add to Cart</a>
                                             </div>
                                         </div>
                                     </div>
@@ -295,15 +295,15 @@
     	    var items = parent.children(childSelector).sort(function(a, b) {
     	    	if(type === "best")
     	    		{
-        	        var vA = $(keySelector, a).attr('id');
-        	        var vB = $(keySelector, b).attr('id');
-        	        return (parseInt(vA) < parseInt(vB)) ? -1 : (parseInt(vA) > parseInt(vB)) ? 1 : 0;
+        	        var vA = $(keySelector, a).attr('nameI');
+        	        var vB = $(keySelector, b).attr('nameI');
+        	        return (vA < vB) ? -1 : (vA > vB) ? 1 : 0;
     	    		}
     	    	if(type === "new")
     	    		{
-        	        var vA = $(keySelector, a).attr('id');
-        	        var vB = $(keySelector, b).attr('id');
-        	        return (parseInt(vA) > parseInt(vB)) ? -1 : (parseInt(vA) < parseInt(vB)) ? 1 : 0;
+        	        var vA = $(keySelector, a).attr('nameI');
+        	        var vB = $(keySelector, b).attr('nameI');
+        	        return (vA > vB) ? -1 : (vA < vB) ? 1 : 0;
     	    		}
     	    	if(type === "low")
     	    		{
@@ -362,31 +362,6 @@
                 window.history.pushState({path:newurl},'',newurl);
             }
           }
-		function addCart(id){
-			var name = $('#'+id+'').attr('nameI');
-			var price = $('#'+id+'').attr('priceI');
-			var divImg = $('#'+id+'').children('div .product-img');
-			var img = divImg.children().first().attr('src');
-			var divBrand = $('#'+id+'').children('div .product-description');
-			var brand = divBrand.children().first().text();
-			var cardList = $('div .cart-list');
-			var card = "<!-- Single Cart Item --><div class='single-cart-item' id='c"+id+"'><a href='#' class='product-image'><img src='"+img+"' class='cart-thumb' alt=''><!-- Cart Item Desc --><div class='cart-item-desc'><span class='product-remove' cid=c"+id+"><i class='fa fa-close' aria-hidden='true'></i></span><span class='badge'>"+brand+"</span><h6>"+name+"</h6><p class='size'>Size: S</p><p class='color'>Color: Red</p><p class='price'>"+price+"</p></div></a></div>";
-			cardList.append(card);
-			alert(name + " is added!");
-			caculatingCards();
-		}
-		$(document).on('click', '.product-remove', function(e) {
-			var id = $(this).attr('cid');
-			$('#'+id+'').remove();
-			caculatingCards();
-		});
-		function caculatingCards(){
-			var x = document.getElementsByClassName("single-cart-item").length;
-			var a = $('#rightSideCart').children('span');
-			var b = $('#essenceCartBtn').children('span');
-			a.text(x);
-			b.text(x);
-		}
     </script>
     <!-- ##### Shop Grid Area End ##### -->
 <jsp:include page="footer.jsp"></jsp:include>
