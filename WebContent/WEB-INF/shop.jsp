@@ -14,13 +14,14 @@
 	int productCount = products.length();
 	String categoryParameter = (String)request.getAttribute("categoryParameter");
 	String pageParameter =request.getParameter("page");
+	if(pageParameter == null){pageParameter = "1";}
 %>
     <!-- ##### Breadcumb Area Start ##### -->
     <div class="breadcumb_area bg-img" style="background-image: url(img/bg-img/breadcumb.jpg);">
         <div class="container h-100">
             <div class="row h-100 align-items-center">
                 <div class="col-12">
-                    <div class="page-title text-center">
+                    <div class="page-title text-center" page="<%=pageParameter%>">
                         <h2><%=categoryParameter %></h2>
                     </div>
                 </div>
@@ -212,11 +213,17 @@
         </div>
     </section>
     <script>
-    	var category= '<%=categoryParameter%>';
+    	var category= $('div .page-title').children('h2').text();
 		var limitItems = 6;
 		var itemslength = $(".items").length;
 		$(".items:gt("+(limitItems+ -1)+")").hide();
-		var totalPages = Math.ceil(<%=productCount%> / limitItems);
+		var productCount = $('div .total-products').find('span').text();
+		var totalPages = Math.ceil(productCount / limitItems);
+		// load pagination by totalPages
+		if(totalPages < 1)
+			{
+			totalPages = 1;
+			}
 		for(var i = 1 ; i <= totalPages ; i++){
 	    	$(".pagination").append("<li class='page-item page-number'><a class='page-link' href='#'>"+ i +"</a></li>");
 		}
@@ -241,11 +248,8 @@
 		        	}
 				}
 
-		});
-		//load pageParameter
-		refreshItems(<%=pageParameter%>);
-		//load pageParameter
-		
+		});		
+		//  next pagination button click
     	$(".next").on("click",function(){
     		var currentPage = $(".pagination .active").index();
     		if(currentPage === totalPages)
@@ -267,6 +271,7 @@
 		        
     			}
     	});
+    	//  previouse pagination button click
     	$(".previousa").on("click",function(){
     		var currentPage = $(".pagination .active").index();
     		if(currentPage === 1)
@@ -287,9 +292,10 @@
 		        	}
     			}
     	});
+    	// sort products
     	$("#sortByselect").on("change",function(){
 				sortUsingNestedText($('#mylist'), '.items', 'div',this.value);
-				refreshItems("pageDefault");
+				loadProductsByPage("pageDefault");
     	});
     	function sortUsingNestedText(parent, childSelector, keySelector,type) {
     	    var items = parent.children(childSelector).sort(function(a, b) {
@@ -320,7 +326,7 @@
     	    });
     	    parent.append(items);
     	}
-    	function refreshItems(page){
+    	function loadProductsByPage(page){
     		if(page === "pageDefault"){
 		        $('.pagination .page-number').removeClass('active');
 		        $(".pagination li:eq(1)").addClass('active');
@@ -347,6 +353,10 @@
 		        	}
     		}
     	}
+    	//load Items by page parameter
+    	var pageParameter = $('div .page-title').attr('page');
+		loadProductsByPage(pageParameter);
+		
         function updateURL(page) {
             if (history.pushState) {
             	var newurl = "";
@@ -362,7 +372,9 @@
                 window.history.pushState({path:newurl},'',newurl);
             }
           }
+        // add cart jquery and add cart in session
 		function addCart(id){
+        	// add cart jquery
 			var name = $('#'+id+'').attr('nameI');
 			var price = $('#'+id+'').attr('priceI');
 			var divImg = $('#'+id+'').children('div .product-img');
@@ -375,17 +387,29 @@
 			alert(name + " is added!");
 			caculatingCards();
 			caculatingSummary();
+			// add cart in session
+			$.ajax({
+				   type: 'get',
+				   url: 'addcart?product='+id
+				 });
+				 return false;
 		}
 		
-		// remove cart
+		// remove cart jquery and remove card in session
 		$(document).on('click', '.product-remove', function(e) {
 			var id = $(this).attr('cid');
 			$('#'+id+'').remove();
 			caculatingCards();
 			caculatingSummary();
+			//remove card in session
+			$.ajax({
+				   type: 'get',
+				   url: 'removecart?product='+id.substring(1)
+				 });
+				 return false;
 		});
 		
-		
+		// count carts
 		function caculatingCards(){
 			var x = document.getElementsByClassName("single-cart-item").length;
 			var a = $('#rightSideCart').children('span');
@@ -393,6 +417,8 @@
 			a.text(x);
 			b.text(x);
 		}
+		caculatingCards();
+		// count total bill
 		function caculatingSummary(){
 			var subTotal = 0;
 			$( "div .single-cart-item" ).each(function( index ) {
@@ -403,8 +429,8 @@
 			var liTotal = $('div .cart-amount-summary').find('li').last();
 			liTotal.children('span').last().text("$"+subTotal);
 		}
+		caculatingSummary();
 
-		
     </script>
     <!-- ##### Shop Grid Area End ##### -->
 <jsp:include page="footer.jsp"></jsp:include>

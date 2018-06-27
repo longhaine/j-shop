@@ -147,5 +147,5 @@
     $("a[href='#']").on('click', function ($) {
         $.preventDefault();
     });
-
+    
 })(jQuery);

@@ -7,6 +7,7 @@
 <%
 	JSONArray categories = (JSONArray) request.getAttribute("categories");
 	JSONArray brands = (JSONArray) request.getAttribute("brands");
+	JSONArray productList = (JSONArray) session.getAttribute("productList");
 %>
  <!-- ##### Header Area Start ##### -->
     <header class="header_area">
@@ -136,11 +137,39 @@
 
             <!-- Cart List Area -->
             <div class="cart-list">
-            
-
+            	
+            	<% 	if(productList != null){
+	            		for(int i = 0,length = productList.length() ; i < length ; i++)
+	            		{
+	            			JSONObject product = productList.getJSONObject(i);
+	            			int id = product.getInt("id");
+	            			String name = product.getString("name");
+	            			String brand = product.getString("nameB");
+	            			String image = product.getString("image");
+	            			float price = product.getFloat("price");
+            	 %>
+            	
+                <!-- Single Cart Item -->
+                <div class="single-cart-item" id="c<%=id%>">
+                    <a href="#" class="product-image">
+                        <img src="<%=image %>1.jpg" class="cart-thumb" alt="">
+                        <!-- Cart Item Desc -->
+                        <div class="cart-item-desc">
+                          <span class="product-remove" cid="c<%=id%>"><i class="fa fa-close" aria-hidden="true"></i></span>
+                            <span class="badge"><%=brand %></span>
+                            <h6>Button Through Strap Mini Dress</h6>
+                            <p class="size">Size: S</p>
+                            <p class="color">Color: Red</p>
+                            <p class="price">$<%=price %></p>
+                        </div>
+                    </a>
+                </div>
+                
+                <%	}
+            	}%>
                 
             </div>
-
+			
             <!-- Cart Summary -->
             <div class="cart-amount-summary">
 
