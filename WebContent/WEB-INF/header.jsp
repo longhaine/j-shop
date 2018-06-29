@@ -10,7 +10,7 @@
     <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
     <!-- Title  -->
-    <title>Vogue - The shop for fashionistas</title>
+    <title>This Website is for Studying Purposes Only</title>
 
     <!-- Favicon  -->
     <link rel="icon" href="img/core-img/favicon.ico">

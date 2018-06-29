@@ -85,10 +85,5 @@ public class CartSession extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-	protected void doHandle(HttpServletRequest request, HttpServletResponse response,String gender) throws ServletException, IOException {
 
-	}
-	protected void doGender(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.getWriter().append("Men or Women?");
-	}
 }

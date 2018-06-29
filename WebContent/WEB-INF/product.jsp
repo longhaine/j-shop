@@ -16,6 +16,7 @@
 			for(int i = 0, length = product.length(); i < length; i ++)
 			{
 				JSONObject object = product.getJSONObject(i);
+				int id = object.getInt("id");
 				String name = object.getString("name");
 				String nameB = object.getString("nameB");
 				float price = object.getFloat("price");
@@ -57,8 +58,7 @@ Please note that some products, colors and sizes shown Online may not be availab
 				<!-- Cart & Favourite Box -->
 				<div class="cart-fav-box d-flex align-items-center">
 					<!-- Cart -->
-					<button type="submit" name="addtocart" value="5"
-						class="btn essence-btn">Add to cart</button>
+					<button name="addtocart" onclick="addCart(<%=id%>,'<%=name%>','<%=price%>','<%=image%>1.jpg','<%=nameB%>')" class="btn essence-btn">Add to cart</button>
 					<!-- Favourite -->
 					<div class="product-favourite ml-4">
 						<a href="#" class="favme fa fa-heart"></a>
