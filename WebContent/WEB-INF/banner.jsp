@@ -95,7 +95,6 @@
                     <!-- Nav End -->
                 </div>
             </nav>
-
             <!-- Header Meta Data -->
             <div class="header-meta d-flex clearfix justify-content-end">
                 <!-- Search Area -->
@@ -111,7 +110,13 @@
                 </div>
                 <!-- User Login Info -->
                 <div class="user-login-info">
-                    <a href="#"><img src="img/core-img/user.svg" alt=""></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="caret"></span><img src="img/core-img/user.svg" alt="">
+                    </a>
+                      <ul class="dropdown-menu">
+    					<h6 class="text-center"><a href="login"><h6>Login</h6></a></h6>
+    					<div class="dropdown-divider"></div>
+    					<h6 class="text-center"><a href="#"><h6>Register</h6></a></h6>
+  					</ul>
                 </div>
                 <!-- Cart Area -->
                 <div class="cart-area">

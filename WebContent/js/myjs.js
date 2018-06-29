@@ -245,3 +245,9 @@ function caculatingSummary() {
 	liTotal.children('span').last().text("$" + subTotal);
 }
 caculatingSummary();
+//-----------------login page
+var message = $('#inValid');
+if(message.attr('message') == 'false')
+	{
+		message.append("<h4 class='text-center'>invalid email or password</h4>");
+	}

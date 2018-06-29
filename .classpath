@@ -15,5 +15,9 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="lib" path="D:/Download/json-20180130.jar"/>
 	<classpathentry kind="lib" path="D:/Download/portlet-api-2.0-r12.jar"/>
+	<classpathentry kind="lib" path="D:/Download/httpclient-4.5.5.jar"/>
+	<classpathentry kind="lib" path="D:/Download/httpcore-4.4.9.jar"/>
+	<classpathentry kind="lib" path="D:/Download/commons-httpclient-3.1.jar"/>
+	<classpathentry kind="lib" path="D:/Download/commons-logging-1.2.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
