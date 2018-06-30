@@ -52,6 +52,17 @@ public class Shop extends HttpServlet {
 
 	}
 	protected void doHandle(HttpServletRequest request, HttpServletResponse response,String gender) throws ServletException, IOException {
+		//load banner
+		LoadBanner(request, response);
+		//load products
+		LoadProductByGender(request, response, gender);
+		request.getRequestDispatcher("WEB-INF/shop.jsp").forward(request, response);
+	}
+	protected void doGender(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.getWriter().append("Men or Women?");
+	}
+	protected void LoadBanner(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
 		CategoriesD categoriesdao = new CategoriesD();
 		BrandsD brandsdao = new BrandsD();
 		ProductsD productsdao = new ProductsD();
@@ -59,7 +70,9 @@ public class Shop extends HttpServlet {
 		request.setAttribute("categories",categories); // specifics
 		JSONArray brands = brandsdao.getBrands();
 		request.setAttribute("brands", brands);
-		//load banner
+	}
+	protected void LoadProductByGender(HttpServletRequest request, HttpServletResponse response,String gender) throws ServletException, IOException {
+		ProductsD productsdao = new ProductsD();
 		JSONArray products = null;
 		String categoryParameter = request.getParameter("category");
 		if(categoryParameter == null){
@@ -72,10 +85,5 @@ public class Shop extends HttpServlet {
 		request.setAttribute("categoryParameter", categoryParameter);
 		request.setAttribute("products",products );
 		request.setAttribute("gender", gender);
-		//load products
-		request.getRequestDispatcher("WEB-INF/shop.jsp").forward(request, response);
-	}
-	protected void doGender(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.getWriter().append("Men or Women?");
 	}
 }

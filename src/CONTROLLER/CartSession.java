@@ -74,7 +74,7 @@ public class CartSession extends HttpServlet {
 				}
 			}
 			session.setAttribute("productList", productList);
-			session.setMaxInactiveInterval(40);
+			session.setMaxInactiveInterval(5*60); // 5 minutes
 		}
 	}
 

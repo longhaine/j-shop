@@ -12,7 +12,7 @@
 	if(email==null){email = "";}
 %>
 <div class="container">
-<div message="<%=message%>" id="inValid">
+<div message="<%=message%>" id="checkValid">
 </div>
 <div class="col-md-4 col-md-offset-4">
   <form class="form-horizontal center" action="login" method="post">

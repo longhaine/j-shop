@@ -1754,11 +1754,11 @@ img {
 .page-active !important{
   display: block;
 }
-.pure-a !important{
-  all: initial;
-  * {
-    all: unset;
-  }
+.cursor-link {
+	cursor : pointer;
+}
+.cursor-default {
+	cursor : default;
 }
 /* ##### The End ##### */
 

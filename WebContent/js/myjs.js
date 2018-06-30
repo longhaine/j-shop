@@ -245,9 +245,27 @@ function caculatingSummary() {
 	liTotal.children('span').last().text("$" + subTotal);
 }
 caculatingSummary();
+
+// link login, register, history, logout
+$('#login').on('click',function(){
+	location.href = "http://localhost:8080/WebShop/login";
+});
+$('#register').on('click',function(){
+	location.href = "http://localhost:8080/WebShop/register";
+});
+$('#logout').on('click',function(){
+	$.ajax({
+		type : 'post',
+		url : 'logout'
+	});
+	location.href = "http://localhost:8080/WebShop/"
+});
+//---------------------------
+
 //-----------------login page
-var message = $('#inValid');
-if(message.attr('message') == 'false')
+var message = $('#checkValid');
+if(message.attr('message') != 'default')
 	{
-		message.append("<h4 class='text-center'>invalid email or password</h4>");
+		message.append("<h4 class='text-center'>"+message.attr('message')+"</h4>");
 	}
+//-----------------register page

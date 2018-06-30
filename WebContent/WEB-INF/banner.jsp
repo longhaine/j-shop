@@ -8,6 +8,7 @@
 	JSONArray categories = (JSONArray) request.getAttribute("categories");
 	JSONArray brands = (JSONArray) request.getAttribute("brands");
 	JSONArray productList = (JSONArray) session.getAttribute("productList");
+	String email  = (String) session.getAttribute("email");
 %>
  <!-- ##### Header Area Start ##### -->
     <header class="header_area">
@@ -112,10 +113,24 @@
                 <div class="user-login-info">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="caret"></span><img src="img/core-img/user.svg" alt="">
                     </a>
-                      <ul class="dropdown-menu">
-    					<h6 class="text-center"><a href="login"><h6>Login</h6></a></h6>
+                      <ul class="dropdown-menu text-center">
+                     	<%
+                      		if(email == null){
+                      	%>
+    					<li class="cursor-link" id="login">Login</li> <!-- Link in js -->
     					<div class="dropdown-divider"></div>
-    					<h6 class="text-center"><a href="#"><h6>Register</h6></a></h6>
+    					<li class="cursor-link" id="register">Register</li> <!-- Link in js -->
+    					<%	}
+                      		else{
+            			%>		
+						<li class="cursor-default">Hi <%=email %>!</li> <!-- Link in js -->
+    					<div class="dropdown-divider"></div>
+    					<li class="cursor-link" id="yourinfo">Your info</li> <!-- Link in js -->
+    					<div class="dropdown-divider"></div>
+    					<li class="cursor-link" id="history">History</li> <!-- Link in js -->
+    					<div class="dropdown-divider"></div>
+    					<li class="cursor-link" id="logout">Logout</li> <!-- Link in js -->
+    					<%	} %>
   					</ul>
                 </div>
                 <!-- Cart Area -->

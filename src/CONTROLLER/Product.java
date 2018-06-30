@@ -32,17 +32,12 @@ public class Product extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		CategoriesD categoriesdao = new CategoriesD();
-		BrandsD brandsdao = new BrandsD();
-		ProductsD productsdao = new ProductsD();
-		JSONArray categories = categoriesdao.getCategories();
-		request.setAttribute("categories",categories); // specifics
-		JSONArray brands = brandsdao.getBrands();
-		request.setAttribute("brands", brands);
-		// load banner
+		//load banner
+		LoadBanner(request, response);
+		// get id product
 		String id = request.getParameter("id");
-		JSONArray product = productsdao.getProductById(id);
-		request.setAttribute("product", product);
+		// pass id and load product
+		LoadProduct(request, response, id);
 		request.getRequestDispatcher("WEB-INF/product.jsp").forward(request, response);
 	}
 
@@ -53,5 +48,19 @@ public class Product extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-
+	protected void LoadProduct(HttpServletRequest request, HttpServletResponse response,String id) throws ServletException, IOException {
+		ProductsD productsdao = new ProductsD();
+		JSONArray product = productsdao.getProductById(id);
+		request.setAttribute("product", product);
+	}
+	protected void LoadBanner(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		CategoriesD categoriesdao = new CategoriesD();
+		BrandsD brandsdao = new BrandsD();
+		ProductsD productsdao = new ProductsD();
+		JSONArray categories = categoriesdao.getCategories();
+		request.setAttribute("categories",categories); // specifics
+		JSONArray brands = brandsdao.getBrands();
+		request.setAttribute("brands", brands);
+	}
 }

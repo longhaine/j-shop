@@ -12,9 +12,9 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.json.JSONObject;
 
 public class AccountsD {
-	public JSONObject Login(String username, String password) throws IOException {
+	public JSONObject Login(String email, String password) throws IOException {
 		JSONObject request = new JSONObject();
-		request.put("email", username);
+		request.put("email", email);
 		request.put("password", password);
 		CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 		HttpPost post = new HttpPost("http://localhost:3000/accounts/login");
@@ -25,7 +25,24 @@ public class AccountsD {
 		ResponseHandler<String> responseHandler = new BasicResponseHandler();
 		String responseBody = responseHandler.handleResponse(response);
 		httpClient.close();
-		JSONObject account = new JSONObject(responseBody);
-		return account;
+		JSONObject jsoObject = new JSONObject(responseBody);
+		return jsoObject;
+	}
+	public JSONObject Register(String email, String password, String name) throws IOException {
+		JSONObject request = new JSONObject();
+		request.put("email", email);
+		request.put("password", password);
+		request.put("name", name);
+		CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+		HttpPost post = new HttpPost("http://localhost:3000/accounts/register");
+		StringEntity params = new StringEntity(request.toString());
+		post.addHeader("content-type", "application/json");
+		post.setEntity(params);
+		HttpResponse response = httpClient.execute(post);
+		ResponseHandler<String> responseHandler = new BasicResponseHandler();
+		String responseBody = responseHandler.handleResponse(response);
+		httpClient.close();
+		JSONObject jsoObject = new JSONObject(responseBody);
+		return jsoObject;
 	}
 }

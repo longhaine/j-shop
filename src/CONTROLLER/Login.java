@@ -6,6 +6,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -34,14 +35,16 @@ public class Login extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		CategoriesD categoriesdao = new CategoriesD();
-		BrandsD brandsdao = new BrandsD();
-		ProductsD productsdao = new ProductsD();
-		JSONArray categories = categoriesdao.getCategories();
-		request.setAttribute("categories",categories); // specifics
-		JSONArray brands = brandsdao.getBrands();
-		request.setAttribute("brands", brands);
-		request.getRequestDispatcher("WEB-INF/login.jsp").forward(request, response);
+		LoadBanner(request, response);
+		HttpSession session = request.getSession();
+		if(session.getAttribute("email") == null)
+		{
+			request.getRequestDispatcher("WEB-INF/login.jsp").forward(request, response);
+		}
+		else
+		{
+			response.sendRedirect("http://localhost:8080/WebShop/");
+		}
 	}
 
 	/**
@@ -55,17 +58,29 @@ public class Login extends HttpServlet {
 			AccountsD accountsdao = new AccountsD();
 			JSONObject account = accountsdao.Login(email, password);
 			boolean message = account.getBoolean("message");
-			if(message == false)
+			if(message == true)
 			{
-				request.setAttribute("email", email);
-				request.setAttribute("message", "false");
-				doGet(request, response);
-			}
-			else {
+				HttpSession session = request.getSession();
+				JSONObject data = account.getJSONArray("data").getJSONObject(0);
+				session.setAttribute("email",data.get("email"));
+				session.setMaxInactiveInterval(5*60);
 				response.sendRedirect("http://localhost:8080/WebShop/");
 			}
+			else {
+				request.setAttribute("email", email);
+				request.setAttribute("message", "invalid email or password");
+				doGet(request, response);
+			}
 		}
-
 	}
-
+	protected void LoadBanner(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		CategoriesD categoriesdao = new CategoriesD();
+		BrandsD brandsdao = new BrandsD();
+		ProductsD productsdao = new ProductsD();
+		JSONArray categories = categoriesdao.getCategories();
+		request.setAttribute("categories",categories); // specifics
+		JSONArray brands = brandsdao.getBrands();
+		request.setAttribute("brands", brands);
+	}
 }
