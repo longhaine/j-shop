@@ -3,6 +3,7 @@ package CONTROLLER;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -63,8 +64,30 @@ public class Login extends HttpServlet {
 				HttpSession session = request.getSession();
 				JSONObject data = account.getJSONArray("data").getJSONObject(0);
 				session.setAttribute("email",data.get("email"));
+				session.setAttribute("nameEmail",data.get("name"));
+				session.setAttribute("addressEmail",data.get("address"));
 				session.setMaxInactiveInterval(5*60);
-				response.sendRedirect("http://localhost:8080/WebShop/");
+				// get path before come to login
+				String pathBefore = null;
+				for(Cookie c : request.getCookies()) 
+				{
+					if(c.getName().equals("path"))
+					{
+						pathBefore = c.getValue();
+						c.setMaxAge(0);
+						response.addCookie(c);//del cookie = del before path
+						break;
+					}
+				}
+				if(pathBefore != null) 
+				{
+					
+					response.sendRedirect("http://localhost:8080/WebShop/"+pathBefore);
+				}
+				else {
+					response.sendRedirect("http://localhost:8080/WebShop/");
+				}
+
 			}
 			else {
 				request.setAttribute("email", email);

@@ -9,6 +9,7 @@
 	JSONArray brands = (JSONArray) request.getAttribute("brands");
 	JSONArray productList = (JSONArray) session.getAttribute("productList");
 	String email  = (String) session.getAttribute("email");
+	String nameEmail = (String) session.getAttribute("nameEmail");
 %>
  <!-- ##### Header Area Start ##### -->
     <header class="header_area">
@@ -123,7 +124,7 @@
     					<%	}
                       		else{
             			%>		
-						<li class="cursor-default">Hi <%=email %>!</li> <!-- Link in js -->
+						<li class="cursor-default">Hi <%=nameEmail %>!</li> <!-- Link in js -->
     					<div class="dropdown-divider"></div>
     					<li class="cursor-link" id="yourinfo">Your info</li> <!-- Link in js -->
     					<div class="dropdown-divider"></div>
@@ -200,9 +201,11 @@
                     <li><span>discount:</span> <span>0%</span></li>
                     <li><span>total:</span> <span></span></li>
                 </ul>
+                <form action="check-out" method="post">
                 <div class="checkout-btn mt-100">
-                    <a href="checkout.html" class="btn essence-btn">check out</a>
+                    <input type="submit"class="btn essence-btn" value="CHECKOUT">
                 </div>
+                </form>
             </div>
             
         </div>

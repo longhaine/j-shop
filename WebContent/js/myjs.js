@@ -220,14 +220,24 @@ $(document).on('click', '.product-remove', function(e) {
 	});
 	return false;
 });
-
 // count carts
-function caculatingCards() {
+function countCarts(){
 	var x = document.getElementsByClassName("single-cart-item").length;
+	return x
+}
+// count carts and add value to icon
+function caculatingCards() {
+	var x = countCarts();
 	var a = $('#rightSideCart').children('span');
 	var b = $('#essenceCartBtn').children('span');
 	a.text(x);
 	b.text(x);
+	if(x <= 0){
+		$('.checkout-btn .essence-btn').hide();
+	}
+	else{
+		$('.checkout-btn .essence-btn').show();
+	}
 }
 caculatingCards();
 // count total bill
@@ -252,6 +262,12 @@ $('#login').on('click',function(){
 });
 $('#register').on('click',function(){
 	location.href = "http://localhost:8080/WebShop/register";
+});
+$('#yourinfo').on('click',function(){
+	location.href = "http://localhost:8080/WebShop/your-info";
+});
+$('#history').on('click',function(){
+	location.href = "http://localhost:8080/WebShop/history";
 });
 $('#logout').on('click',function(){
 	$.ajax({
