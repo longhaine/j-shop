@@ -213,6 +213,7 @@ $(document).on('click', '.product-remove', function(e) {
 	$('#' + id + '').remove();
 	caculatingCards();
 	caculatingSummary();
+	caculatingCheckout(id);
 	//remove card in session
 	$.ajax({
 		type : 'get',
@@ -285,3 +286,15 @@ if(message.attr('message') != 'default')
 		message.append("<h4 class='text-center'>"+message.attr('message')+"</h4>");
 	}
 //-----------------register page
+// checkout caculating
+function caculatingCheckout(id){
+	$('#checkout'+id).remove();
+	var price = 0;
+	var li = $('div .order-details-confirmation').children('ul').children('li');
+	var length = li.length;
+	for(var i = 1 ; i < length-3 ; i++){
+		price = price + parseFloat(li.eq(i).attr('price'));
+	}
+	li.eq(length-3).children('span').last().text('$'+price);
+	li.eq(length-1).children('span').last().text('$'+price);
+}

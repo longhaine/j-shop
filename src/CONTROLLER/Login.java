@@ -62,11 +62,13 @@ public class Login extends HttpServlet {
 			if(message == true)
 			{
 				HttpSession session = request.getSession();
-				JSONObject data = account.getJSONArray("data").getJSONObject(0);
-				session.setAttribute("email",data.get("email"));
-				session.setAttribute("nameEmail",data.get("name"));
-				session.setAttribute("addressEmail",data.get("address"));
+				JSONObject user = account.getJSONArray("data").getJSONObject(0);
+				user.remove("role");
+				user.remove("password");
+				session.setAttribute("user", user);
 				session.setMaxInactiveInterval(5*60);
+				// delete guest info
+				session.removeAttribute("guest");
 				// get path before come to login
 				String pathBefore = null;
 				for(Cookie c : request.getCookies()) 

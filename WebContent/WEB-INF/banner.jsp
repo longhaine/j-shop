@@ -8,8 +8,12 @@
 	JSONArray categories = (JSONArray) request.getAttribute("categories");
 	JSONArray brands = (JSONArray) request.getAttribute("brands");
 	JSONArray productList = (JSONArray) session.getAttribute("productList");
-	String email  = (String) session.getAttribute("email");
-	String nameEmail = (String) session.getAttribute("nameEmail");
+	JSONObject user  = (JSONObject) session.getAttribute("user");
+	String userName= "";
+	if(user != null)
+	{
+		userName = user.getString("name");
+	}
 %>
  <!-- ##### Header Area Start ##### -->
     <header class="header_area">
@@ -116,7 +120,7 @@
                     </a>
                       <ul class="dropdown-menu text-center">
                      	<%
-                      		if(email == null){
+                      		if(user == null){
                       	%>
     					<li class="cursor-link" id="login">Login</li> <!-- Link in js -->
     					<div class="dropdown-divider"></div>
@@ -124,7 +128,7 @@
     					<%	}
                       		else{
             			%>		
-						<li class="cursor-default">Hi <%=nameEmail %>!</li> <!-- Link in js -->
+						<li class="cursor-default">Hi <%=userName %>!</li> <!-- Link in js -->
     					<div class="dropdown-divider"></div>
     					<li class="cursor-link" id="yourinfo">Your info</li> <!-- Link in js -->
     					<div class="dropdown-divider"></div>
@@ -178,7 +182,7 @@
                         <div class="cart-item-desc">
                           <span class="product-remove" cid="c<%=id%>"><i class="fa fa-close" aria-hidden="true"></i></span>
                             <span class="badge"><%=brand %></span>
-                            <h6>Button Through Strap Mini Dress</h6>
+                            <h6><%=name %></h6>
                             <p class="size">Size: S</p>
                             <p class="color">Color: Red</p>
                             <p class="price">$<%=price %></p>
@@ -201,7 +205,7 @@
                     <li><span>discount:</span> <span>0%</span></li>
                     <li><span>total:</span> <span></span></li>
                 </ul>
-                <form action="check-out" method="post">
+                <form action="check-out" method="get">
                 <div class="checkout-btn mt-100">
                     <input type="submit"class="btn essence-btn" value="CHECKOUT">
                 </div>

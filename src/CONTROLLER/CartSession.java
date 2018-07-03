@@ -42,7 +42,7 @@ public class CartSession extends HttpServlet {
 		{
 			JSONObject product = productsdao.getProductById(id).getJSONObject(0); // get product to add or remove
 			JSONArray productList = (JSONArray)session.getAttribute("productList"); //old product list
-			if(action.equals("addcart"))
+			if(action.equals("addcart")) // addcart
 			{
 				if(productList != null)
 				{
@@ -54,7 +54,7 @@ public class CartSession extends HttpServlet {
 					productList.put(product);
 				}
 			}
-			if(action.equals("removecart")) {
+			if(action.equals("removecart")) { // remove cart
 				if(productList != null) 
 				{
 					int index = -1;
@@ -75,6 +75,10 @@ public class CartSession extends HttpServlet {
 			}
 			session.setAttribute("productList", productList);
 			session.setMaxInactiveInterval(5*60); // 5 minutes
+			if(productList.length() == 0) // if session productlist doesn't have 1 product
+			{
+				session.removeAttribute("productList");
+			}
 		}
 	}
 
