@@ -34,66 +34,7 @@ function loadProductsByPage(pageParameter){
 	}
 }
 loadProductsByPage(pageParameter);
-//for (var i = 1; i <= totalPages; i++) {
-//	$(".pagination").append(
-//			"<li class='page-item page-number'><a class='page-link' href='#'>"
-//					+ i + "</a></li>");
-//}
-//$(".pagination")
-//		.append(
-//				"<li class='page-item next'><a class='page-link' href='#'><i class='fa fa-angle-right'></i></a></li>");
-//$(".pagination li:eq(1)").addClass('active');
-//$(".pagination .page-number").on("click", function() {
-//	if ($(this).hasClass("active")) {
-//		return false;
-//	} else {
-//		var currentPage = $(this).index();
-//		updateURL(currentPage);
-//		$('.pagination .page-number').removeClass('active');
-//		$(this).addClass('active');
-//		var grandTotal = limitItems * currentPage;
-//		$(".items").hide();
-//		for (var i = grandTotal - limitItems; i < grandTotal; i++) {
-//			$(".items:eq(" + i + ")").show();
-//		}
-//	}
-//
-//});
-////  next pagination button click
-//$(".next").on("click", function() {
-//	var currentPage = $(".pagination .active").index();
-//	if (currentPage === totalPages) {
-//		return false
-//	} else {
-//		currentPage++;
-//		updateURL(currentPage);
-//		$('.pagination .page-number').removeClass('active');
-//		$(".pagination li:eq(" + currentPage + ")").addClass('active');
-//		var grandTotal = limitItems * currentPage;
-//		$(".items").hide();
-//		for (var i = grandTotal - limitItems; i < grandTotal; i++) {
-//			$(".items:eq(" + i + ")").show();
-//		}
-//
-//	}
-//});
-////  previouse pagination button click
-//$(".previousa").on("click", function() {
-//	var currentPage = $(".pagination .active").index();
-//	if (currentPage === 1) {
-//		return false
-//	} else {
-//		currentPage--;
-//		updateURL(currentPage);
-//		$('.pagination .page-number').removeClass('active');
-//		$(".pagination li:eq(" + currentPage + ")").addClass('active');
-//		var grandTotal = limitItems * currentPage;
-//		$(".items").hide();
-//		for (var i = grandTotal - limitItems; i < grandTotal; i++) {
-//			$(".items:eq(" + i + ")").show();
-//		}
-//	}
-//});
+
 //sort products
 $("#sortByselect").on("change", function() {
 	sortUsingNestedText($('#mylist'), '.items', 'div', this.value,pageParameter);
@@ -130,39 +71,6 @@ function sortUsingNestedText(parent, childSelector, keySelector, type,pageParame
 	loadProductsByPage(pageParameter);
 	if(pageParameter >= totalPages){$('#btnLoadMore').toggleClass('disabled')} // for toggleClass two times
 }
-//function loadProductsByPage(page) {
-//	if (page === "pageDefault") {
-//		$('.pagination .page-number').removeClass('active');
-//		$(".pagination li:eq(1)").addClass('active');
-//		var grandTotal = limitItems * 1;
-//		$(".items").hide();
-//		for (var i = grandTotal - limitItems; i < grandTotal; i++) {
-//			$(".items:eq(" + i + ")").show();
-//		}
-//	} else {
-//		if (page == null) {
-//			page = 1;
-//		}
-//		if (page > totalPages || page < 1) {
-//			if (page < 1) {
-//				page = 1;
-//			}
-//			if (page > totalPages) {
-//				page = totalPages;
-//			}
-//		}
-//		$('.pagination .page-number').removeClass('active');
-//		$(".pagination li:eq(" + page + ")").addClass('active');
-//		var grandTotal = limitItems * page;
-//		$(".items").hide();
-//		for (var i = grandTotal - limitItems; i < grandTotal; i++) {
-//			$(".items:eq(" + i + ")").show();
-//		}
-//	}
-//}
-//load Items by page parameter
-//loadProductsByPage(pageParameter);
-
 function updateURL(page) {
 	if (history.pushState) {
 		var newurl = "";
@@ -268,7 +176,7 @@ $('#yourinfo').on('click',function(){
 	location.href = "http://localhost:8080/WebShop/your-info";
 });
 $('#history').on('click',function(){
-	location.href = "http://localhost:8080/WebShop/history";
+	location.href = "http://localhost:8080/WebShop/orders";
 });
 $('#logout').on('click',function(){
 	$.ajax({
@@ -298,3 +206,119 @@ function caculatingCheckout(id){
 	li.eq(length-3).children('span').last().text('$'+price);
 	li.eq(length-1).children('span').last().text('$'+price);
 }
+// move to your order when click order list
+$("div .order-list").children('ul').first().children('li').click(function() {
+    $('html, body').animate({
+        scrollTop: $("#your-order").offset().top
+    }, 500);
+    var id = $(this).attr('id');
+    $.ajax({
+    	type : 'get',
+        url:"orderdetails?id="+id,  
+        success:function(data) {
+          $('div .order-details-confirmation').find('li:gt(0)').remove();
+          $('div .order-details-confirmation').find('li:eq(0)').after(data);
+        }
+      });
+});
+
+//move to order list when click pagination
+
+
+
+////////////////////////////////JS ORDER PAGE
+var orderPage = $('div .cart-page-heading').attr('page'); 
+var orders = $('div .cart-page-heading').attr('count');
+var litmitOrders = 2;
+$(".ul-list li:gt("+(litmitOrders -1)+")").hide();
+var totalNumbers = Math.ceil(orders/litmitOrders);
+if(totalNumbers < 1){totalNumbers = 1;}
+for (var i = 1; i <= totalNumbers; i++) {
+	$(".pagination").append("<li class='li-number'><a href='#'>"+i+"</a></li>");
+}
+$(".pagination").append("<li class='next'><a href='#'><i class='fa fa-angle-right'></i></a></li>");
+$(".pagination li:eq(1)").addClass('active');
+$(".pagination .li-number").on("click", function() {
+	if($(this).hasClass("active")){
+		return false;
+	}
+	else{
+	var currentPage = $(this).index();
+	updateURLOrder(currentPage);
+	$('.pagination li').removeClass('active');
+	$(this).addClass('active');
+	var grandTotal = litmitOrders * currentPage;
+	$(".ul-list li").hide();
+	for (var i = grandTotal - litmitOrders; i < grandTotal; i++) {
+		$(".ul-list li:eq(" + i + ")").show();
+	}
+}
+});
+//next pagination button click
+$(".next").on("click", function(){
+	var currentPage = $(".pagination .active").index();
+	if (currentPage === totalNumbers){
+		return false
+	}
+	else{
+		currentPage++;
+		updateURLOrder(currentPage);
+		$('.pagination li').removeClass('active');
+		$(".pagination li:eq(" + currentPage + ")").addClass('active');
+		var grandTotal = litmitOrders * currentPage;
+		$(".ul-list li").hide();
+		for (var i = grandTotal - litmitOrders; i < grandTotal; i++){
+			$(".ul-list li:eq(" + i + ")").show();
+}
+	}
+});
+//previouse pagination button click
+$(".previous").on("click", function() {
+var currentPage = $(".pagination .active").index();
+if (currentPage === 1) {
+	return false
+} else {
+	currentPage--;
+	updateURLOrder(currentPage);
+	$('.pagination li').removeClass('active');
+	$(".pagination li:eq(" + currentPage + ")").addClass('active');
+	var grandTotal = litmitOrders * currentPage;
+	$(".ul-list li").hide();
+	for (var i = grandTotal - litmitOrders; i < grandTotal; i++) {
+		$(".ul-list li:eq(" + i + ")").show();
+	}
+}
+});
+function updateURLOrder(page) {
+	if (history.pushState) {
+		var newurl = "";
+		var url = window.location.href.split('?page')[0];
+		newurl = url + "?page=" + page;
+		window.history.pushState({
+			path : newurl
+		}, '', newurl);
+	}
+}
+function loadOrdersByPage(page) {
+	if (page == null) {
+		page = 1;
+	}
+	if (page > totalNumbers || page < 1) {
+		if (page < 1) {
+			page = 1;
+		}
+		if (page > totalNumbers) {
+			page = totalNumbers;
+		}
+	}
+	$('.pagination .page-number').removeClass('active');
+	$(".pagination li:eq(" + page + ")").addClass('active');
+	var grandTotal = litmitOrders * page;
+	$(".ul-list li").hide();
+	for (var i = grandTotal - litmitOrders; i < grandTotal; i++) {
+		$(".ul-list li:eq(" + i + ")").show();
+	}
+}
+//load Items by page parameter
+loadOrdersByPage(orderPage);
+//////////////////////////// END JS ORDER PAGE

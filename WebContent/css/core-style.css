@@ -1760,6 +1760,29 @@ img {
 .cursor-default {
 	cursor : default;
 }
+div.order-list{
+	padding : 30px;
+	border: 2px solid #ebebeb;
+}
+div.order-list li{
+	border: 1px solid #ebebeb;
+	padding: 10px;
+	-webkit-transition : box-shadow 0.1s,transform 0.1s;
+	transition : box-shadow 0.1s,transform 0.1s;
+}
+div.order-list li:hover{
+	box-shadow: 1.5px 3px grey;
+	-ms-transform: translate(-1px,-3px); /* IE 9 */
+    -webkit-transform: translate(-1px,-3px); 
+	transform : translate(-1px,-3px);
+}
+span.id-order{
+	margin-right: 2rem;
+}
+span.date-order{
+	margin-right: 1rem;
+	display:block;
+}
 /* ##### The End ##### */
 
 /*# sourceMappingURL=core-style.css.map */

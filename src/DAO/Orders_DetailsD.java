@@ -1,6 +1,8 @@
 package DAO;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.Scanner;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ResponseHandler;
@@ -29,5 +31,18 @@ public class Orders_DetailsD {
 		JSONObject jsoObject = new JSONObject(responseBody);
 		String message = jsoObject.getString("message");
 		return message;
+	}
+	public JSONArray getOrderDetails(int id) throws IOException {
+		String path ="http://localhost:3000/orders_details/get/"+id;
+		URL url = new URL(path);
+		Scanner scan = new Scanner(url.openStream());
+		String json = "";
+		while(scan.hasNext())
+		{
+			json = json + scan.nextLine();
+		}
+		scan.close();
+		JSONArray jsonarr = new JSONArray(json);
+		return jsonarr;
 	}
 }

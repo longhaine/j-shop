@@ -113,15 +113,15 @@ public class Checkout extends HttpServlet {
 				order.put("name", userName);
 				order.put("address", userAddress);
 				order.put("phone", userPhone);
+				order.put("sessionId", "");
 				int idOrder = ordersdao.Order(order,price);// get idOrder just insert
 				String message = orders_detailsdao.Order_Details(idOrder, productList); // check 
 				if(message.equals("ok")) // everything's okay!
 				{
 					session.removeAttribute("productList");// delete productList just placed order
-					request.setAttribute("message", "Place order successfully!!! The products will be delivered to your address tomorrow!");
+					session.setAttribute("message", "Place order successfully!!! The products will be delivered to your address tomorrow!");
 				}
-				LoadBanner(request, response);
-				request.getRequestDispatcher("WEB-INF/checkout.jsp").forward(request, response);
+				response.sendRedirect("http://localhost:8080/WebShop/orders");
 		}
 		else if(productList !=null && user == null) // in case guest
 		{
@@ -132,6 +132,7 @@ public class Checkout extends HttpServlet {
 				{
 					price = price + productList.getJSONObject(i).getFloat("price");
 				}
+				String sessionId = session.getId();
 				OrdersD ordersdao = new OrdersD();
 				Orders_DetailsD orders_detailsdao = new Orders_DetailsD();
 				JSONObject order = new JSONObject();
@@ -139,16 +140,16 @@ public class Checkout extends HttpServlet {
 				order.put("name", name);
 				order.put("address", address);
 				order.put("phone", phone);
+				order.put("sessionId", sessionId);
 				int idOrder = ordersdao.Order(order,price);// get idOrder just insert
 				String message = orders_detailsdao.Order_Details(idOrder, productList); // check 
 				if(message.equals("ok")) // everything's okay!
 				{
 					session.removeAttribute("productList");// delete productList just place order
-					session.setAttribute("guest", order); // generate guest info
-					request.setAttribute("message", "Place order successfully!!! The products will be delivered to your address tomorrow!");
+					session.setAttribute("guest", order);// generate guest info
+					session.setAttribute("message", "Place order successfully!!! The products will be delivered to your address tomorrow!");
 				}
-				LoadBanner(request, response);
-				request.getRequestDispatcher("WEB-INF/checkout.jsp").forward(request, response);
+				response.sendRedirect("http://localhost:8080/WebShop/orders");
 			}
 			else {
 				request.setAttribute("message", "invalid");
@@ -171,5 +172,4 @@ public class Checkout extends HttpServlet {
 		JSONArray brands = brandsdao.getBrands();
 		request.setAttribute("brands", brands);
 	}
-
 }

@@ -50,7 +50,6 @@
     <div class="checkout_area section-padding-80">
         <div class="container">
             <div class="row">
-				<div id="checkValid" message="<%=message%>"></div>
                 <div class="col-12 col-md-6">
                     <div class="checkout_details_area mt-50 clearfix">
 
