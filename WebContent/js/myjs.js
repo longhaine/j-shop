@@ -164,7 +164,6 @@ function caculatingSummary() {
 	liTotal.children('span').last().text("$" + subTotal);
 }
 caculatingSummary();
-
 // link login, register, history, logout
 $('#login').on('click',function(){
 	location.href = "http://localhost:8080/WebShop/login";
@@ -174,6 +173,9 @@ $('#register').on('click',function(){
 });
 $('#yourinfo').on('click',function(){
 	location.href = "http://localhost:8080/WebShop/your-info";
+});
+$('#changepassword').on('click',function(){
+	location.href = "http://localhost:8080/WebShop/change-pass";
 });
 $('#history').on('click',function(){
 	location.href = "http://localhost:8080/WebShop/orders";
@@ -195,6 +197,8 @@ if(message.attr('message') != 'default')
 	}
 //-----------------register page
 // checkout caculating
+
+////////////////////////////////JS CHECKOUT PAGE
 function caculatingCheckout(id){
 	$('#checkout'+id).remove();
 	var price = 0;
@@ -206,46 +210,51 @@ function caculatingCheckout(id){
 	li.eq(length-3).children('span').last().text('$'+price);
 	li.eq(length-1).children('span').last().text('$'+price);
 }
-// move to your order when click order list
+
+
+////////////////////////////////JS ORDER PAGE
+// move to your order when click order list and load order list
+var idOrder = 0;
 $("div .order-list").children('ul').first().children('li').click(function() {
     $('html, body').animate({
         scrollTop: $("#your-order").offset().top
     }, 500);
     var id = $(this).attr('id');
-    $.ajax({
-    	type : 'get',
-        url:"orderdetails?id="+id,  
-        success:function(data) {
-          $('div .order-details-confirmation').find('li:gt(0)').remove();
-          $('div .order-details-confirmation').find('li:eq(0)').after(data);
-        }
-      });
+    if(idOrder != id){ //check id already loaded orderlist
+       idOrder = id;
+       $.ajax({
+       	type : 'get',
+           url:"orderdetails?id="+id,  
+           success:function(data) {
+             $('div .order-details-confirmation').find('li:gt(0)').remove();
+             $('div .order-details-confirmation').find('li:eq(0)').after(data);
+           }
+       }); 
+    }
 });
 
 //move to order list when click pagination
 
-
-
-////////////////////////////////JS ORDER PAGE
-var orderPage = $('div .cart-page-heading').attr('page'); 
+var orderPage = $('div .cart-page-heading').attr('page');
+$('span.page-order').text('Page :'+orderPage);
 var orders = $('div .cart-page-heading').attr('count');
-var litmitOrders = 2;
+var litmitOrders = 5;
 $(".ul-list li:gt("+(litmitOrders -1)+")").hide();
 var totalNumbers = Math.ceil(orders/litmitOrders);
 if(totalNumbers < 1){totalNumbers = 1;}
 for (var i = 1; i <= totalNumbers; i++) {
-	$(".pagination").append("<li class='li-number'><a href='#'>"+i+"</a></li>");
+	$(".pagination-order").append("<li class='li-number'><a href='#'>"+i+"</a></li>");
 }
-$(".pagination").append("<li class='next'><a href='#'><i class='fa fa-angle-right'></i></a></li>");
-$(".pagination li:eq(1)").addClass('active');
-$(".pagination .li-number").on("click", function() {
+$(".pagination-order").append("<li class='next'><a href='#'><i class='fa fa-angle-right'></i></a></li>");
+$(".pagination-order li:eq(1)").addClass('active');
+$(".pagination-order .li-number").on("click", function() {
 	if($(this).hasClass("active")){
 		return false;
 	}
 	else{
 	var currentPage = $(this).index();
 	updateURLOrder(currentPage);
-	$('.pagination li').removeClass('active');
+	$('.pagination-order li').removeClass('active');
 	$(this).addClass('active');
 	var grandTotal = litmitOrders * currentPage;
 	$(".ul-list li").hide();
@@ -256,15 +265,15 @@ $(".pagination .li-number").on("click", function() {
 });
 //next pagination button click
 $(".next").on("click", function(){
-	var currentPage = $(".pagination .active").index();
+	var currentPage = $(".pagination-order .active").index();
 	if (currentPage === totalNumbers){
 		return false
 	}
 	else{
 		currentPage++;
 		updateURLOrder(currentPage);
-		$('.pagination li').removeClass('active');
-		$(".pagination li:eq(" + currentPage + ")").addClass('active');
+		$('.pagination-order li').removeClass('active');
+		$(".pagination-order li:eq(" + currentPage + ")").addClass('active');
 		var grandTotal = litmitOrders * currentPage;
 		$(".ul-list li").hide();
 		for (var i = grandTotal - litmitOrders; i < grandTotal; i++){
@@ -273,46 +282,41 @@ $(".next").on("click", function(){
 	}
 });
 //previouse pagination button click
-$(".previous").on("click", function() {
-var currentPage = $(".pagination .active").index();
-if (currentPage === 1) {
-	return false
-} else {
-	currentPage--;
-	updateURLOrder(currentPage);
-	$('.pagination li').removeClass('active');
-	$(".pagination li:eq(" + currentPage + ")").addClass('active');
-	var grandTotal = litmitOrders * currentPage;
-	$(".ul-list li").hide();
-	for (var i = grandTotal - litmitOrders; i < grandTotal; i++) {
-		$(".ul-list li:eq(" + i + ")").show();
+$(".previous").on("click", function(){
+	var currentPage = $(".pagination-order .active").index();
+	if (currentPage === 1){
+		return false
 	}
-}
+	else{
+		currentPage--;
+		updateURLOrder(currentPage);
+		$('.pagination-order li').removeClass('active');
+		$(".pagination-order li:eq(" + currentPage + ")").addClass('active');
+		var grandTotal = litmitOrders * currentPage;
+		$(".ul-list li").hide();
+		for(var i = grandTotal - litmitOrders; i < grandTotal; i++) {
+			$(".ul-list li:eq(" + i + ")").show();
+		}
+	}
 });
 function updateURLOrder(page) {
 	if (history.pushState) {
 		var newurl = "";
 		var url = window.location.href.split('?page')[0];
 		newurl = url + "?page=" + page;
-		window.history.pushState({
-			path : newurl
-		}, '', newurl);
+		window.history.pushState({path : newurl}, '', newurl);
 	}
+	$('span.page-order').text('Page :'+page);
 }
 function loadOrdersByPage(page) {
-	if (page == null) {
+	if (page == null || page < 1){
 		page = 1;
 	}
-	if (page > totalNumbers || page < 1) {
-		if (page < 1) {
-			page = 1;
-		}
-		if (page > totalNumbers) {
-			page = totalNumbers;
-		}
+	if (page > totalNumbers){
+		page = totalNumbers;
 	}
-	$('.pagination .page-number').removeClass('active');
-	$(".pagination li:eq(" + page + ")").addClass('active');
+	$('.pagination-order li').removeClass('active');
+	$(".pagination-order li:eq(" + page + ")").addClass('active');
 	var grandTotal = litmitOrders * page;
 	$(".ul-list li").hide();
 	for (var i = grandTotal - litmitOrders; i < grandTotal; i++) {
@@ -322,3 +326,123 @@ function loadOrdersByPage(page) {
 //load Items by page parameter
 loadOrdersByPage(orderPage);
 //////////////////////////// END JS ORDER PAGE
+
+
+
+
+
+
+
+
+////////////////////////// JS ADMIN PAGE
+
+var pageAdmin = $('table.table').attr('page');
+var records = $('tbody tr').length;
+var litmitRecords = 5;
+$("tbody tr:gt("+(litmitRecords -1)+")").hide();
+var totalNumbersA = Math.ceil(records/litmitRecords);
+if(totalNumbersA < 1){totalNumbersA = 1;}
+for (var i = 1; i <= totalNumbersA; i++) {
+	$(".pagination-a").append("<li class='li-number'><a class='page-link' href='#'>"+i+"</a></li>");
+}
+$(".pagination-a").append("<li class='next-a'><a class='page-link' href='#'><i class='fa fa-angle-right'></i></a></li>");
+$(".pagination-a li:eq(1)").addClass('active');
+$(".pagination-a .li-number").on("click", function() {
+	if($(this).hasClass("active")){
+		return false;
+	}
+	else{
+	var currentPage = $(this).index();
+	updateURLAdmin(currentPage);
+	$('.pagination-a li').removeClass('active');
+	$(this).addClass('active');
+	var grandTotal = litmitRecords * currentPage;
+	$("tbody tr").hide();
+	for (var i = grandTotal - litmitRecords; i < grandTotal; i++) {
+		$("tbody tr:eq(" + i + ")").show();
+	}
+}
+});
+//next pagination button click
+$(".next-a").on("click", function(){
+	var currentPage = $(".pagination-a .active").index();
+	if (currentPage === totalNumbersA){
+		return false
+	}
+	else{
+		currentPage++;
+		updateURLAdmin(currentPage);
+		$('.pagination-a li').removeClass('active');
+		$(".pagination-a li:eq(" + currentPage + ")").addClass('active');
+		var grandTotal = litmitRecords * currentPage;
+		$("tbody tr").hide();
+		for (var i = grandTotal - litmitRecords; i < grandTotal; i++){
+			$("tbody tr:eq(" + i + ")").show();
+}
+	}
+});
+//previouse pagination button click
+$(".previous-a").on("click", function(){
+	var currentPage = $(".pagination-a .active").index();
+	if (currentPage === 1){
+		return false
+	}
+	else{
+		currentPage--;
+		updateURLAdmin(currentPage);
+		$('.pagination-a li').removeClass('active');
+		$(".pagination-a li:eq(" + currentPage + ")").addClass('active');
+		var grandTotal = litmitRecords * currentPage;
+		$("tbody tr").hide();
+		for(var i = grandTotal - litmitRecords; i < grandTotal; i++) {
+			$("tbody tr:eq(" + i + ")").show();
+		}
+	}
+});
+function updateURLAdmin(page) {
+	if (history.pushState) {
+		var newurl = "";
+		var url = window.location.href.split('?page')[0];
+		newurl = url + "?page=" + page;
+		window.history.pushState({path : newurl}, '', newurl);
+	}
+}
+function loadOrdersByPageA(page) {
+	if (page == null || page < 1){
+		page = 1;
+	}
+	if (page > totalNumbersA){
+		page = totalNumbersA;
+	}
+	$('.pagination-a li').removeClass('active');
+	$(".pagination-a li:eq(" + page + ")").addClass('active');
+	var grandTotal = litmitRecords * page;
+	$("tbody tr").hide();
+	for (var i = grandTotal - litmitRecords; i < grandTotal; i++) {
+		$("tbody tr:eq(" + i + ")").show();
+	}
+}
+loadOrdersByPageA(pageAdmin);
+// button admin page
+var deleteBtn = $('i.fa-close');
+deleteBtn.click(function(){
+	var id = $(this).parent().attr('class').substring(2);
+	var table = $(this).parent().attr('table');
+	var r = confirm('Do you want delete this?');
+	var that = $(this).closest('tr');
+	if(r == true)
+		{
+	       $.ajax({
+	          	type : 'get',
+	              url:"delete?table="+table+"&id="+id,  
+	              success:function(data) {
+	            	  if(data == "success"){
+	            		  that.remove();
+	            	  }
+	            	  else{
+	            		  alert(data);
+	            	  }
+	              }
+	          }); 
+		}
+})

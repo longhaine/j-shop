@@ -47,6 +47,7 @@
                             <h5>Order List</h5>
                         </div>
 						<div class="order-list">
+						<span class="page-order"></span>
 						<ul class="ul-list">
 							<%
 								for(int i = 0; i < orderLength ; i++ )
@@ -64,12 +65,12 @@
 							</li>
 							<%} %>
 						</ul>
-                        <ul class="pagination">
+						
+                        <ul class="pagination pagination-order">
                             <li class="previous"><a href="#"><i class="fa fa-angle-left"></i></a></li>
                         </ul>
-                 
+                        
 						</div>
-						
                     </div>
                 </div>
 

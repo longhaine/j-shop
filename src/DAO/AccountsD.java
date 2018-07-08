@@ -64,4 +64,20 @@ public class AccountsD {
 		JSONObject jsoObject = new JSONObject(responseBody);
 		return jsoObject;
 	}
+	public JSONObject ChangePassword(String email, String password) throws IOException {
+		JSONObject request = new JSONObject();
+		request.put("email", email);
+		request.put("password", password);
+		CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+		HttpPost post = new HttpPost("http://localhost:3000/accounts/changepassword");
+		StringEntity params = new StringEntity(request.toString());
+		post.addHeader("content-type", "application/json");
+		post.setEntity(params);
+		HttpResponse response = httpClient.execute(post);
+		ResponseHandler<String> responseHandler = new BasicResponseHandler();
+		String responseBody = responseHandler.handleResponse(response);
+		httpClient.close();
+		JSONObject jsoObject = new JSONObject(responseBody);
+		return jsoObject;
+	}
 }

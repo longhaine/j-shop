@@ -63,8 +63,6 @@ public class Login extends HttpServlet {
 			{
 				HttpSession session = request.getSession();
 				JSONObject user = account.getJSONArray("data").getJSONObject(0);
-				user.remove("role");
-				user.remove("password");
 				session.setAttribute("user", user);
 				session.setMaxInactiveInterval(5*60);
 				// delete guest info

@@ -125,12 +125,16 @@
     					<li class="cursor-link" id="login">Login</li> <!-- Link in js -->
     					<div class="dropdown-divider"></div>
     					<li class="cursor-link" id="register">Register</li> <!-- Link in js -->
+    					<div class="dropdown-divider"></div>
+    					<li class="cursor-link" id="history">History</li> <!-- Link in js -->
     					<%	}
                       		else{
             			%>		
 						<li class="cursor-default">Hi <%=userName %>!</li> <!-- Link in js -->
     					<div class="dropdown-divider"></div>
     					<li class="cursor-link" id="yourinfo">Your info</li> <!-- Link in js -->
+    					<div class="dropdown-divider"></div>
+    					<li class="cursor-link" id="changepassword">Change Password</li> <!-- Link in js -->
     					<div class="dropdown-divider"></div>
     					<li class="cursor-link" id="history">History</li> <!-- Link in js -->
     					<div class="dropdown-divider"></div>
